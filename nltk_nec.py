@@ -84,7 +84,3 @@ if __name__ == '__main__':
     chunk_trees = ner_pipeline(text_en)
     # chunk_trees = ner_pipeline(text_de)
     pp(chunk_trees)
-
-    # read on:
-    # http://www.nltk.org/book/ch07.html#sec-ner chaper 3
-    # http://mattshomepage.com/articles/2016/May/23/nltk_nec/
