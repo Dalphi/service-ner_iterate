@@ -12,3 +12,4 @@ Articles / Blogs / Papers - everything that helps the current development:
 
 - [NLTK book, chaper 7 (Extracting Information from Text)](http://www.nltk.org/book/ch07.html#sec-ner)
 - [Lifting the Hood on NLTK's NE Chunker](http://mattshomepage.com/articles/2016/May/23/nltk_nec/)
+- [some MaxEnt background](http://scikit-learn.org/stable/modules/linear_model.html#logistic-regression)

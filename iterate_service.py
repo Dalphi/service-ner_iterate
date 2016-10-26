@@ -44,7 +44,6 @@ def iterate():
     app.logger.info('post iterate')
     post_json_data = json.dumps(request.json)
     corpus = decode_post_data(post_json_data)
-    pp(post_json_data)
     documents = create_annotation_documents(corpus)
 
     app.logger.info('created annotation documents from posted JSON data')
@@ -72,7 +71,7 @@ def create_annotation_documents(corpus):
         content = corpus_part['content']
         parsed_content = json.JSONDecoder().decode(content)
         payload = {
-            'content': parsed_content['content']
+            'content': named_entity_chunking(parsed_content['content'])
         }
 
         document = {
@@ -84,6 +83,16 @@ def create_annotation_documents(corpus):
         annotation_documents.append(document)
 
     return annotation_documents
+
+def named_entity_chunking(paragraph):
+    # create a list of lists of tuples
+    pos_tagged_sentences = [nltk_nec.part_of_speech_tagging(sentence) for sentence in paragraph]
+
+    # create a list of nltk trees containing named entity chunks
+    chunk_trees = [nltk_nec.named_entity_token_chunking(sentence) for sentence in pos_tagged_sentences]
+
+    # convert chunk trees back to sentences (list of lists of token objects)
+    return [nltk_tree_converter.convert_nltk_tree(tree) for tree in chunk_trees]
 
 def create_json_respons_from(hash):
     response = jsonify(hash)
