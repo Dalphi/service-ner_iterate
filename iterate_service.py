@@ -13,6 +13,11 @@ import json
 import logging
 import socket
 
+# import project libs
+
+import nltk_nec
+import nltk_tree_converter
+
 # defining globals & constants
 
 INTERFACE_TYPE = 'ner_complete'
@@ -63,14 +68,17 @@ def create_annotation_documents(corpus):
     annotation_documents = []
     for index, corpus_part in enumerate(corpus):
         raw_datum_id = corpus_part['raw_datum_id']
+
         content = corpus_part['content']
         parsed_content = json.JSONDecoder().decode(content)
-        payload = parsed_content['content']
+        payload = {
+            'content': parsed_content['content']
+        }
 
         document = {
             'rank': index,
             'raw_datum_id': raw_datum_id,
-            'payload': payload,
+            'payload': json.dumps(payload),
             'interface_type': INTERFACE_TYPE
         }
         annotation_documents.append(document)
