@@ -8,91 +8,91 @@ from flask import jsonify
 from flask import request
 from pprint import pprint as pp
 import argparse
-import base64
 import json
 import logging
 import socket
 
 # import project libs
 
-import nltk_nec
+import ner_pipeline
+import iteration_processing
+import merge_processing
 import nltk_tree_converter
 
 # defining globals & constants
 
-INTERFACE_TYPE = 'ner_complete'
 app = Flask(__name__)
 
 # Flask routes
 
 @app.route('/', methods=['GET'])
-@app.route('/iterate', methods=['GET'])
-@app.route('/who_are_you', methods=['GET'])
 def who_are_you():
+    app.logger.info('who are you request; respond with JSON')
+    message = {
+        'services': [
+            {
+                'role': 'merge',
+                'route': '/merge'
+            },
+            {
+                'role': 'iterate',
+                'route': '/iterate'
+            }
+        ]
+    }
+
+    return create_json_respons_from(message)
+
+@app.route('/iterate', methods=['GET'])
+def iterate_who_are_you():
     message = {
         'role': 'iterate',
-        'title': 'RawData Converter',
-        'description': 'Iterate service dummy to convert RawData to renderable AnnotationDocuments.',
-        'version': 0.1,
+        'title': 'MaxEnt NER Iterator',
+        'description': 'Using NLTK\'s MaxEnt chunker for NER. Currently only for english language.',
+        'version': 0.2,
         'problem_id': 'ner',
-        'interface_types': [ INTERFACE_TYPE ]
+        'interface_types': [ 'ner_complete', 'ner_paragraph' ]
     }
     return create_json_respons_from(message)
 
 @app.route('/iterate', methods=['POST'])
 def iterate():
-    app.logger.info('post iterate')
-    post_json_data = json.dumps(request.json)
-    corpus = decode_post_data(post_json_data)
-    documents = create_annotation_documents(corpus)
+    app.logger.info('iterate request')
+    corpus = iteration_processing.decode_post_data(request.json)
+    documents = iteration_processing.iterate_corpus(corpus)
 
-    app.logger.info('created annotation documents from posted JSON data')
-    app.logger.info(documents)
+    app.logger.info('transmitted corpus contains ' + str(len(corpus)) + ' documents; ' \
+                    'created ' + str(len(documents)) + ' annotation documents')
 
     response = { 'annotation_documents': documents }
     return create_json_respons_from(response)
 
+@app.route('/merge', methods=['GET'])
+def merge_who_are_you():
+    message = {
+        'role': 'merge',
+        'title': 'RawDatum replacer',
+        'description': 'Creates new raw data from annotation documents. ' \
+                       'Existing Raw datum will be deleted.',
+        'version': 0.1,
+        'problem_id': 'ner'
+    }
+    return create_json_respons_from(message)
+
+@app.route('/merge', methods=['POST'])
+def merge():
+    app.logger.info('merge request')
+    (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(request.json)
+    raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
+
+    app.logger.info('received ' + str(len(annotation_documents)) + ' documents for raw datum ' \
+                    '#' + str(raw_datum_id))
+
+    pp(raw_datum)
+
+    return create_json_respons_from(raw_datum)
+
 # helpers
-
-def decode_post_data(post_json_data):
-    dict_content = json.JSONDecoder().decode(post_json_data)
-    for raw_datum in dict_content:
-        encoded_content = raw_datum['content']
-        deconded_content = base64.b64decode(encoded_content).decode('utf-8')
-        raw_datum['content'] = deconded_content
-
-    return dict_content
-
-def create_annotation_documents(corpus):
-    annotation_documents = []
-    for index, corpus_part in enumerate(corpus):
-        raw_datum_id = corpus_part['raw_datum_id']
-
-        content = corpus_part['content']
-        parsed_content = json.JSONDecoder().decode(content)
-        payload = {
-            'content': named_entity_chunking(parsed_content['content'])
-        }
-
-        document = {
-            'rank': index,
-            'raw_datum_id': raw_datum_id,
-            'payload': json.dumps(payload),
-            'interface_type': INTERFACE_TYPE
-        }
-        annotation_documents.append(document)
-
-    return annotation_documents
-
-def named_entity_chunking(paragraph):
-    # create a list of lists of tuples
-    pos_tagged_sentences = [nltk_nec.part_of_speech_tagging(sentence) for sentence in paragraph]
-
-    # create a list of nltk trees containing named entity chunks
-    chunk_trees = [nltk_nec.named_entity_token_chunking(sentence) for sentence in pos_tagged_sentences]
-
-    # convert chunk trees back to sentences (list of lists of token objects)
-    return [nltk_tree_converter.convert_nltk_tree(tree) for tree in chunk_trees]
 
 def create_json_respons_from(hash):
     response = jsonify(hash)
@@ -141,7 +141,9 @@ if __name__ == '__main__':
     if args.verbose:
         beVerbose = True
 
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     file_handler = logging.FileHandler('service.log')
+    file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info('start running flask app')

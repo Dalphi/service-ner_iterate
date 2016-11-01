@@ -15,6 +15,7 @@ sentence = []
 
 def convert_nltk_tree(tree):
     global sentence
+    sentence = []
 
     for node in tree:
         if type(node) is Tree:

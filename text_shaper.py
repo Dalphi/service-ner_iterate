@@ -9,7 +9,7 @@ from pprint import pprint as pp
 
 # import project libs
 
-import nltk_nec
+import ner_pipeline
 import nltk_tree_converter
 
 # defining globals & constants
