@@ -6,13 +6,16 @@
 from pprint import pprint as pp
 import base64
 import json
+import datetime
+import os
 
 # import project libs
 # -
 
 # defining globals & constants
 
-SAFE_DOCUMENTS_TO_FILE = False
+SAVE_DOCUMENTS_TO_FILE = True
+DOCUMENT_FOLDER = 'processed_annotation_documents'
 
 # methods
 
@@ -25,13 +28,13 @@ def decode_post_data(request_json):
 
 def create_new_raw_datum(raw_datum_id, annotation_documents):
     content = []
-    print('create_new_raw_datum')
     for document in annotation_documents:
+        if SAVE_DOCUMENTS_TO_FILE:
+            save_document_to_file(document)
+
         if document['raw_datum_id'] == raw_datum_id:
             json_encoded_payload = document['payload']
             payload = json.JSONDecoder().decode(json_encoded_payload)
-            payload_content = payload['content']
-            pp(payload_content)
 
             # the `content` of an annotation document holds only one paragraph
             paragraph = payload['content'][0]
@@ -50,3 +53,23 @@ def create_new_raw_datum(raw_datum_id, annotation_documents):
         'content': string_content,
         'raw_datum_id': raw_datum_id
     }
+
+def save_document_to_file(document):
+    json_encoded_document = json.dumps(document)
+    file_name = generate_filename_for(document)
+
+    file_handler = open(file_name, 'w')
+    file_handler.write(json_encoded_document)
+    file_handler.close()
+
+def generate_filename_for(document):
+    prefix = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    raw_datum_id = document['raw_datum_id']
+    rank = document['rank']
+
+    if DOCUMENT_FOLDER:
+        if not os.path.exists(DOCUMENT_FOLDER):
+            os.makedirs(DOCUMENT_FOLDER)
+        return "%s/%s_%s_%s.json" % (DOCUMENT_FOLDER, prefix, raw_datum_id, rank)
+    else:
+        return "%s_%s_%s.json" % (prefix, raw_datum_id, rank)

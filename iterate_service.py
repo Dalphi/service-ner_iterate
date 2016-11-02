@@ -61,8 +61,7 @@ def iterate():
     corpus = iteration_processing.decode_post_data(request.json)
     documents = iteration_processing.iterate_corpus(corpus)
 
-    app.logger.info('transmitted corpus contains ' + str(len(corpus)) + ' documents; ' \
-                    'created ' + str(len(documents)) + ' annotation documents')
+    app.logger.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
 
     response = { 'annotation_documents': documents }
     return create_json_respons_from(response)
@@ -83,13 +82,9 @@ def merge_who_are_you():
 def merge():
     app.logger.info('merge request')
     (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(request.json)
+    app.logger.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
+
     raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
-
-    app.logger.info('received ' + str(len(annotation_documents)) + ' documents for raw datum ' \
-                    '#' + str(raw_datum_id))
-
-    pp(raw_datum)
-
     return create_json_respons_from(raw_datum)
 
 # helpers
