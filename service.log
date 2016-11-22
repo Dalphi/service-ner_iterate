@@ -154,3 +154,20 @@
 2016-11-22 16:07:39,897 - __main__ - INFO - iterate request
 2016-11-22 16:07:42,185 - __main__ - INFO - transmitted corpus contains 6 documents; created 75 annotation documents
 2016-11-22 16:29:39,110 - __main__ - INFO - start running flask app
+2016-11-22 16:35:23,867 - __main__ - INFO - start running flask app
+2016-11-22 16:35:37,658 - __main__ - INFO - start running flask app
+2016-11-22 16:40:28,144 - __main__ - INFO - iterate request
+2016-11-22 16:40:28,969 - __main__ - INFO - transmitted corpus contains 1 documents; created 13 annotation documents
+2016-11-22 16:40:57,995 - __main__ - INFO - start running flask app
+2016-11-22 16:40:59,526 - __main__ - INFO - iterate request
+2016-11-22 16:41:00,740 - __main__ - INFO - transmitted corpus contains 1 documents; created 13 annotation documents
+2016-11-22 16:44:19,328 - __main__ - INFO - iterate request
+2016-11-22 16:44:20,039 - __main__ - INFO - transmitted corpus contains 2 documents; created 13 annotation documents
+2016-11-22 16:46:03,802 - __main__ - INFO - start running flask app
+2016-11-22 16:49:02,873 - __main__ - INFO - start running flask app
+2016-11-22 16:49:54,818 - __main__ - INFO - start running flask app
+2016-11-22 16:50:04,415 - __main__ - INFO - start running flask app
+2016-11-22 16:54:26,655 - __main__ - INFO - start running flask app
+2016-11-22 16:55:15,614 - __main__ - INFO - start running flask app
+2016-11-22 16:55:22,156 - __main__ - INFO - start running flask app
+2016-11-22 16:56:40,589 - __main__ - INFO - start running flask app

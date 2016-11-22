@@ -44,6 +44,33 @@ def iterate_corpus(corpus):
 
     return annotation_documents
 
+def training(corpus):
+    # train a maxent classifier for chunking named entities with this current corpus
+    decapsulated_corpus = decapsulate(corpus)
+    filtered_corpus = extract_annotated_senteces(decapsulated_corpus)
+    ner_pipeline.train_maxent_chunker(filtered_corpus)
+
+def decapsulate(corpus):
+    listified_corpus = [listify(element) for element in corpus]
+    number_of_corpus_documents = len(listified_corpus)
+    if number_of_corpus_documents == 1:
+        return listified_corpus[0]
+    else:
+        # TODO Merge the elements of listified_corpus together.
+        # The result should be a list of paragraphs
+        return listified_corpus
+
+def listify(obj):
+    if isinstance(obj, dict):
+        inner_object = obj['content']
+        return listify(inner_object)
+    else:
+        return obj
+
+def extract_annotated_senteces(paragraphs):
+    # TODO Filter unannotated senteces
+    return paragraphs
+
 def add_annotation_document(document_list, raw_id, document_content):
     payload = { 'content': document_content }
     encoded_payload = json.dumps(payload)
@@ -65,18 +92,6 @@ def deannotize(sentences):
         plain_tokenized_sentences.append(new_sentence)
 
     return plain_tokenized_sentences
-
-def decapsulate(obj):
-    if isinstance(obj, dict):
-        inner_object = obj['content']
-        return decapsulate(inner_object)
-    else:
-        return obj
-
-def training(corpus):
-    # train a maxent classifier for chunking named entities with this current corpus
-    decapsulated_corpus = [decapsulate(element) for element in corpus]
-    ner_pipeline.train_maxent_chunker(decapsulated_corpus[0])
 
 def named_entity_chunking(paragraph):
     # create a list of lists of tuples
