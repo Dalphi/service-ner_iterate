@@ -14,7 +14,7 @@ import os
 
 # defining globals & constants
 
-SAVE_DOCUMENTS_TO_FILE = True
+SAVE_DOCUMENTS_TO_FILE = False
 DOCUMENT_FOLDER = 'processed_annotation_documents'
 
 # methods

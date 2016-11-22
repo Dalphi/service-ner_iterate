@@ -17,7 +17,6 @@ import socket
 import ner_pipeline
 import iteration_processing
 import merge_processing
-import nltk_tree_converter
 
 # defining globals & constants
 

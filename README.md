@@ -1,10 +1,36 @@
 # NER Iterate Service
 
-This software is in an early development state. One day it will be a [Dalphi](https://github.com/Dalphi/dalphi) iterate service to do NER based annotations.
+This software is in an early development state. It aims to be a [Dalphi](https://github.com/Dalphi/dalphi) iterate service to do NER based annotations.
 
-## Current task
+This repo contains all the tools you need (currently it's based on some NLTK libs to do the ML - so this is a dependency):
 
-Do NER using NLTK. If this works, pair it with the current dummy service. Then substitute NLTK's libs with selfmade implementations.
+- Dalphi iterate and merge services (HTTP)  
+  `python3 iterate_service.py -v -l`
+- text shaper to convert a plain text file to a JSON based exchange format
+  `python3 text_shaper.py input.txt output.json`
+- some Python libs for converting the text exchange format to NLTK's tree format and vice versa, handling HTTP communication and a NER pipeline (to easily exchange NLTK's MaxEnt-classifier)
+
+## Usage
+
+### Prepare
+
+Convert your plain text to Dalphi *raw data*
+
+`python3 text_shaper.py input.txt output.json`
+
+### Launch
+
+`python3 iterate_service.py -v -l`
+
+### Dalphi
+
+- Add the two services (Iterate & Merge) in Dalphi's service overview. Check stdout for details on your address. It will probably be something like  
+`http://localhost:5001/iterate` for the Iterate service and  
+`http://localhost:5001/merge` for the merge service.
+- Assign those services in your project's settings.
+- Import all the raw data you generated using the text shaper.
+- Run an iteration by selecting the annotation document's tab and click the button within the blank slate.
+- Annotate : )
 
 ## Read
 

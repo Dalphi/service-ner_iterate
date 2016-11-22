@@ -3,6 +3,7 @@
 
 # import python libs
 
+import re
 import json
 import argparse
 from pprint import pprint as pp
@@ -16,11 +17,15 @@ import nltk_tree_converter
 # -
 
 def shape(raw_text):
+    # simplify quotes
+    raw_text = re.sub("``", ' "', raw_text)
+    raw_text = re.sub("''", '" ', raw_text)
+
     # create a list of strings
-    sentences = nltk_nec.sentence_splitting(raw_text)
+    sentences = ner_pipeline.sentence_splitting(raw_text)
 
     # create a list of lists of strings
-    tokenized_sentences = [nltk_nec.word_tokenization(sentence) for sentence in sentences]
+    tokenized_sentences = [ner_pipeline.word_tokenization(sentence) for sentence in sentences]
 
     sentences = []
     for sentence in tokenized_sentences:

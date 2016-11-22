@@ -29,8 +29,9 @@ def decode_post_data(request_json):
     return dict_content
 
 def iterate_corpus(corpus):
-    annotation_documents = []
+    training(corpus)
 
+    annotation_documents = []
     for index, corpus_document in enumerate(corpus):
         raw_datum_id = corpus_document['raw_datum_id']
         document_content = corpus_document['content']
@@ -65,6 +66,18 @@ def deannotize(sentences):
 
     return plain_tokenized_sentences
 
+def decapsulate(obj):
+    if isinstance(obj, dict):
+        inner_object = obj['content']
+        return decapsulate(inner_object)
+    else:
+        return obj
+
+def training(corpus):
+    # train a maxent classifier for chunking named entities with this current corpus
+    decapsulated_corpus = [decapsulate(element) for element in corpus]
+    ner_pipeline.train_maxent_chunker(decapsulated_corpus[0])
+
 def named_entity_chunking(paragraph):
     # create a list of lists of tuples
     pos_tagged_sentences = [ner_pipeline.part_of_speech_tagging(sentence) for sentence in paragraph]
@@ -73,4 +86,4 @@ def named_entity_chunking(paragraph):
     chunk_trees = [ner_pipeline.named_entity_token_chunking(sentence) for sentence in pos_tagged_sentences]
 
     # convert chunk trees back to sentences (list of lists of token objects)
-    return [nltk_tree_converter.convert_nltk_tree(tree) for tree in chunk_trees]
+    return [nltk_tree_converter.tree_to_sentence(tree) for tree in chunk_trees]

@@ -18,3 +18,4 @@
 /public/system
 /__pycache__
 /raw_data
+/processed_annotation_documents

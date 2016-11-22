@@ -1,0 +1,156 @@
+2016-11-02 16:49:54,647 - __main__ - INFO - start running flask app
+2016-11-02 16:49:55,072 - __main__ - INFO - start running flask app
+2016-11-02 16:50:08,956 - __main__ - INFO - iterate request
+2016-11-02 16:50:42,460 - __main__ - INFO - start running flask app
+2016-11-02 16:50:45,791 - __main__ - INFO - iterate request
+2016-11-02 16:50:47,864 - __main__ - INFO - transmitted corpus contains 1 documents; created 33 annotation documents
+2016-11-02 18:01:09,558 - __main__ - INFO - start running flask app
+2016-11-02 18:01:10,012 - __main__ - INFO - start running flask app
+2016-11-02 18:01:19,443 - __main__ - INFO - merge request
+2016-11-02 18:01:19,449 - __main__ - INFO - received 33 documents as parts of raw datum #302
+2016-11-02 18:06:04,292 - __main__ - INFO - start running flask app
+2016-11-02 18:08:11,809 - __main__ - INFO - start running flask app
+2016-11-02 18:09:26,435 - __main__ - INFO - start running flask app
+2016-11-02 18:12:50,813 - __main__ - INFO - start running flask app
+2016-11-02 18:14:30,229 - __main__ - INFO - start running flask app
+2016-11-02 18:14:55,976 - __main__ - INFO - start running flask app
+2016-11-02 18:15:08,139 - __main__ - INFO - iterate request
+2016-11-02 18:15:21,862 - __main__ - INFO - start running flask app
+2016-11-02 18:15:24,057 - __main__ - INFO - iterate request
+2016-11-02 18:19:18,617 - __main__ - INFO - start running flask app
+2016-11-02 18:21:01,156 - __main__ - INFO - start running flask app
+2016-11-02 18:21:03,346 - __main__ - INFO - iterate request
+2016-11-02 18:23:16,282 - __main__ - INFO - start running flask app
+2016-11-02 18:26:37,879 - __main__ - INFO - start running flask app
+2016-11-02 18:26:38,317 - __main__ - INFO - start running flask app
+2016-11-02 18:26:45,132 - __main__ - INFO - iterate request
+2016-11-02 18:27:22,277 - __main__ - INFO - start running flask app
+2016-11-02 18:29:41,001 - __main__ - INFO - start running flask app
+2016-11-02 18:30:14,843 - __main__ - INFO - start running flask app
+2016-11-02 18:30:16,839 - __main__ - INFO - iterate request
+2016-11-02 18:31:21,938 - __main__ - INFO - start running flask app
+2016-11-02 18:31:47,041 - __main__ - INFO - start running flask app
+2016-11-02 18:31:47,451 - __main__ - INFO - start running flask app
+2016-11-02 18:31:51,496 - __main__ - INFO - iterate request
+2016-11-02 18:34:31,863 - __main__ - INFO - start running flask app
+2016-11-02 18:35:31,251 - __main__ - INFO - start running flask app
+2016-11-02 18:35:31,682 - __main__ - INFO - start running flask app
+2016-11-02 18:35:33,592 - __main__ - INFO - iterate request
+2016-11-02 18:36:29,968 - __main__ - INFO - start running flask app
+2016-11-02 18:36:35,783 - __main__ - INFO - start running flask app
+2016-11-02 18:36:36,225 - __main__ - INFO - start running flask app
+2016-11-02 18:36:41,691 - __main__ - INFO - iterate request
+2016-11-02 18:37:27,972 - __main__ - INFO - start running flask app
+2016-11-02 18:37:37,018 - __main__ - INFO - start running flask app
+2016-11-02 18:37:39,727 - __main__ - INFO - iterate request
+2016-11-02 18:37:47,226 - __main__ - INFO - transmitted corpus contains 1 documents; created 33 annotation documents
+2016-11-02 18:41:36,507 - __main__ - INFO - merge request
+2016-11-02 18:41:36,516 - __main__ - INFO - received 33 documents as parts of raw datum #302
+2016-11-02 18:46:44,366 - __main__ - INFO - iterate request
+2016-11-02 18:46:44,575 - __main__ - INFO - transmitted corpus contains 1 documents; created 8 annotation documents
+2016-11-02 18:48:28,806 - __main__ - INFO - merge request
+2016-11-02 18:48:28,807 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 18:48:32,930 - __main__ - INFO - iterate request
+2016-11-02 18:48:33,752 - __main__ - INFO - transmitted corpus contains 1 documents; created 8 annotation documents
+2016-11-02 18:49:44,765 - __main__ - INFO - merge request
+2016-11-02 18:49:44,767 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 18:49:48,935 - __main__ - INFO - iterate request
+2016-11-02 18:49:50,023 - __main__ - INFO - transmitted corpus contains 1 documents; created 8 annotation documents
+2016-11-02 18:51:55,068 - __main__ - INFO - start running flask app
+2016-11-02 18:52:08,769 - __main__ - INFO - start running flask app
+2016-11-02 18:52:39,733 - __main__ - INFO - start running flask app
+2016-11-02 18:52:54,373 - __main__ - INFO - start running flask app
+2016-11-02 18:53:47,529 - __main__ - INFO - start running flask app
+2016-11-02 18:54:24,407 - __main__ - INFO - start running flask app
+2016-11-02 21:21:27,914 - __main__ - INFO - merge request
+2016-11-02 21:21:27,920 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 21:21:32,349 - __main__ - INFO - iterate request
+2016-11-02 21:21:33,102 - __main__ - INFO - transmitted corpus contains 1 documents; created 8 annotation documents
+2016-11-02 21:23:02,808 - __main__ - INFO - merge request
+2016-11-02 21:23:02,810 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 21:23:05,363 - __main__ - INFO - iterate request
+2016-11-02 21:23:06,009 - __main__ - INFO - transmitted corpus contains 1 documents; created 8 annotation documents
+2016-11-02 21:25:56,388 - __main__ - INFO - iterate request
+2016-11-02 21:25:57,166 - __main__ - INFO - transmitted corpus contains 2 documents; created 22 annotation documents
+2016-11-02 21:26:04,475 - __main__ - INFO - merge request
+2016-11-02 21:26:04,477 - __main__ - INFO - received 16 documents as parts of raw datum #303
+2016-11-02 21:26:04,496 - __main__ - INFO - merge request
+2016-11-02 21:26:04,498 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-02 21:26:07,446 - __main__ - INFO - iterate request
+2016-11-02 21:26:08,802 - __main__ - INFO - transmitted corpus contains 2 documents; created 30 annotation documents
+2016-11-02 21:35:42,596 - __main__ - INFO - merge request
+2016-11-02 21:35:42,597 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 21:35:42,620 - __main__ - INFO - merge request
+2016-11-02 21:35:42,623 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-02 21:35:45,303 - __main__ - INFO - iterate request
+2016-11-02 21:35:46,374 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-02 21:37:42,376 - __main__ - INFO - start running flask app
+2016-11-02 21:37:42,810 - __main__ - INFO - start running flask app
+2016-11-02 21:37:57,107 - __main__ - INFO - merge request
+2016-11-02 21:37:57,109 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 21:37:57,134 - __main__ - INFO - merge request
+2016-11-02 21:37:57,137 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-02 21:37:57,171 - __main__ - INFO - merge request
+2016-11-02 21:37:57,173 - __main__ - INFO - received 10 documents as parts of raw datum #305
+2016-11-02 21:38:00,793 - __main__ - INFO - iterate request
+2016-11-02 21:38:02,175 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-02 21:44:50,465 - __main__ - INFO - merge request
+2016-11-02 21:44:50,467 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-02 21:44:50,490 - __main__ - INFO - merge request
+2016-11-02 21:44:50,492 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-02 21:44:50,517 - __main__ - INFO - merge request
+2016-11-02 21:44:50,520 - __main__ - INFO - received 10 documents as parts of raw datum #305
+2016-11-02 21:47:05,016 - __main__ - INFO - iterate request
+2016-11-02 21:47:07,016 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-02 21:49:52,539 - __main__ - INFO - start running flask app
+2016-11-02 21:49:52,998 - __main__ - INFO - start running flask app
+2016-11-02 21:49:55,401 - __main__ - INFO - iterate request
+2016-11-02 21:49:57,714 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-03 08:24:32,702 - __main__ - INFO - start running flask app
+2016-11-03 08:24:33,265 - __main__ - INFO - start running flask app
+2016-11-03 08:24:38,172 - __main__ - INFO - iterate request
+2016-11-03 08:24:40,233 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-03 08:25:45,409 - __main__ - INFO - merge request
+2016-11-03 08:25:45,411 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-03 08:25:45,441 - __main__ - INFO - merge request
+2016-11-03 08:25:45,445 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-03 08:25:45,485 - __main__ - INFO - merge request
+2016-11-03 08:25:45,487 - __main__ - INFO - received 10 documents as parts of raw datum #305
+2016-11-03 08:28:25,307 - __main__ - INFO - start running flask app
+2016-11-03 08:28:25,734 - __main__ - INFO - start running flask app
+2016-11-03 08:28:28,020 - __main__ - INFO - iterate request
+2016-11-03 08:28:29,453 - __main__ - INFO - transmitted corpus contains 3 documents; created 32 annotation documents
+2016-11-03 08:34:23,624 - __main__ - INFO - merge request
+2016-11-03 08:34:23,628 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-03 08:34:23,662 - __main__ - INFO - merge request
+2016-11-03 08:34:23,664 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-03 08:34:23,710 - __main__ - INFO - merge request
+2016-11-03 08:34:23,713 - __main__ - INFO - received 10 documents as parts of raw datum #305
+2016-11-03 08:35:52,708 - __main__ - INFO - start running flask app
+2016-11-03 08:35:53,177 - __main__ - INFO - start running flask app
+2016-11-03 08:35:57,066 - __main__ - INFO - iterate request
+2016-11-03 08:35:59,109 - __main__ - INFO - transmitted corpus contains 6 documents; created 75 annotation documents
+2016-11-03 08:48:20,018 - __main__ - INFO - merge request
+2016-11-03 08:48:20,020 - __main__ - INFO - received 8 documents as parts of raw datum #303
+2016-11-03 08:48:20,049 - __main__ - INFO - merge request
+2016-11-03 08:48:20,051 - __main__ - INFO - received 14 documents as parts of raw datum #304
+2016-11-03 08:48:20,085 - __main__ - INFO - merge request
+2016-11-03 08:48:20,087 - __main__ - INFO - received 10 documents as parts of raw datum #305
+2016-11-03 08:48:20,116 - __main__ - INFO - merge request
+2016-11-03 08:48:20,117 - __main__ - INFO - received 5 documents as parts of raw datum #306
+2016-11-03 08:48:20,176 - __main__ - INFO - merge request
+2016-11-03 08:48:20,178 - __main__ - INFO - received 5 documents as parts of raw datum #307
+2016-11-03 08:48:20,216 - __main__ - INFO - merge request
+2016-11-03 08:48:20,220 - __main__ - INFO - received 33 documents as parts of raw datum #308
+2016-11-03 08:48:54,956 - __main__ - INFO - iterate request
+2016-11-03 08:48:56,572 - __main__ - INFO - transmitted corpus contains 6 documents; created 75 annotation documents
+2016-11-03 08:49:12,854 - __main__ - INFO - start running flask app
+2016-11-03 08:49:13,399 - __main__ - INFO - start running flask app
+2016-11-03 08:49:18,577 - __main__ - INFO - iterate request
+2016-11-03 08:49:21,060 - __main__ - INFO - transmitted corpus contains 6 documents; created 75 annotation documents
+2016-11-22 16:07:12,358 - __main__ - INFO - start running flask app
+2016-11-22 16:07:21,863 - __main__ - INFO - start running flask app
+2016-11-22 16:07:22,291 - __main__ - INFO - start running flask app
+2016-11-22 16:07:39,897 - __main__ - INFO - iterate request
+2016-11-22 16:07:42,185 - __main__ - INFO - transmitted corpus contains 6 documents; created 75 annotation documents
+2016-11-22 16:29:39,110 - __main__ - INFO - start running flask app

@@ -4,17 +4,28 @@
 # import python libs
 
 import nltk
+import pickle
+import json
 from nltk import Tree
 from nltk.draw.util import CanvasFrame
 from nltk.draw import TreeWidget
 from pprint import pprint as pp
+from nltk.chunk.api import ChunkParserI
 
 # import project libs
 
 import nltk_tree_converter
+import maxent_chunker
 
 # defining globals & constants
-# -
+
+NLTK_CHUNKER_PATH = 'chunkers/maxent_ne_chunker/PY3/english_ace_multiclass.pickle'
+SAVE_CHUNKER_AS_PICKLE = False
+CHUNKER_PICKLE_NAME = 'implisense_ne_chunker_multiclass.pickle'
+
+self_trained_chunker = False
+
+# methods
 
 def ner_pipeline(raw_text):
     print('NER pipeline: splitting / tokenizing / tagging / chunking ...')
@@ -27,10 +38,6 @@ def ner_pipeline(raw_text):
 
     # create a list of lists of tuples
     pos_tagged_sentences = [part_of_speech_tagging(sentence) for sentence in tokenized_sentences]
-    pp(pos_tagged_sentences[0])
-    exit()
-
-    explain_tagging(pos_tagged_sentences[0])
 
     # create a list of nltk trees containing named entity chunks
     chunk_trees = [named_entity_token_chunking(sentence) for sentence in pos_tagged_sentences]
@@ -47,15 +54,46 @@ def part_of_speech_tagging(sentence):
     return nltk.pos_tag(sentence)
 
 def named_entity_token_chunking(tagged_sentence):
-    # Loads the serialized NEChunkParser object
-    chunker = nltk.data.load('chunkers/maxent_ne_chunker/PY3/english_ace_multiclass.pickle')
-    return chunker.parse(tagged_sentence)
+    global self_trained_chunker
+
+    if self_trained_chunker:
+        return self_trained_chunker.parse(tagged_sentence)
+    else:
+        print('using a pre trained chunker for (default NLTK NEChunker)')
+        # Loads the serialized NLTK NEChunkParser object
+        chunker = nltk.data.load(NLTK_CHUNKER_PATH)
+        return chunker.parse(tagged_sentence)
+
+def train_maxent_chunker(tokenized_paragraphs):
+    training_data_tree = nltk_tree_converter.corpus_to_tree(tokenized_paragraphs)
+    pos_tagged_tree = maxent_chunker.postag_tree(training_data_tree)
+    training_data = [pos_tagged_tree]
+    return build_maxent_model(training_data)
+
+def build_maxent_model(training_data):
+    global self_trained_chunker
+    self_trained_chunker = maxent_chunker.NEChunkParser(training_data)
+
+    if SAVE_CHUNKER_AS_PICKLE:
+        print('Saving chunker to %s...' % CHUNKER_PICKLE_NAME)
+
+        with open(CHUNKER_PICKLE_NAME, 'wb') as outfile:
+            pickle.dump(chunker, outfile, -1)
+
+    return self_trained_chunker
 
 # helper
 
+def load_annotated_raw_datum(file_name):
+    file_handler = open(file_name, 'r')
+    json_encoded_document = file_handler.read()
+    file_handler.close()
+    corpus_document = json.JSONDecoder().decode(json_encoded_document)
+    return corpus_document['content']
+
 def explain_tagging(tagged_sentence):
     # Loads the serialized NEChunkParser object
-    chunker = nltk.data.load('chunkers/maxent_ne_chunker/PY3/english_ace_multiclass.pickle')
+    chunker = nltk.data.load(NLTK_CHUNKER_PATH)
 
     # The MaxEnt classifier
     maxEnt = chunker._tagger.classifier()
@@ -72,8 +110,6 @@ def explain_tagging(tagged_sentence):
     return tags
 
 def draw_to_file(tree):
-    global name_index
-
     canvas = CanvasFrame()
     tree_canvas = TreeWidget(canvas.canvas(), tree)
     canvas.add_widget(tree_canvas,10,10)
@@ -89,9 +125,11 @@ def draw_to_file(tree):
 # entry point as a stand alone script
 
 if __name__ == '__main__':
-    name_index = 0
-    text = "The man blamed for bringing HIV to the United States just had his name cleared. New research has proved that Gaëtan Dugas, a French-Canadian flight attendant who was dubbed \"patient zero,\" did not spread HIV, the virus that causes AIDS, to the United States."
+    training_corpus = load_annotated_raw_datum('raw_data/download/16-11-02_16-42_nyt.json')
+    train_maxent_chunker(training_corpus)
+
+    text = "Stéphane Bohbot, founder of Innov8 Group, also invested and is being namechecked specifically for his expertise in retail and connected objects, something that the startup hopes to leverage as it seeks growth through hardware, not just software."
 
     chunk_trees = ner_pipeline(text)
-    sentences = [nltk_tree_converter.convert_nltk_tree(tree) for tree in chunk_trees]
+    sentences = [nltk_tree_converter.tree_to_sentence(tree) for tree in chunk_trees]
     pp(sentences)
