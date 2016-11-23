@@ -33,15 +33,15 @@ def iterate_corpus(corpus):
     training(corpus)
 
     annotation_documents = []
-    for index, corpus_document in enumerate(corpus):
+    for corpus_document in corpus:
         raw_datum_id = corpus_document['raw_datum_id']
         document_content = corpus_document['content']
 
         for paragraph in document_content['content']:
             plain_tokenized_sentences = deannotize(paragraph)
-            chunked_sentences = named_entity_chunking(plain_tokenized_sentences)
-            target_content = [ chunked_sentences ]
-            add_annotation_document(annotation_documents, raw_datum_id, target_content)
+            ne_chunked_paragraph = ne_chunking(plain_tokenized_sentences)
+            annotated_paragraph = prefere_human_annotations(paragraph, ne_chunked_paragraph)
+            add_annotation_document(annotation_documents, raw_datum_id, annotated_paragraph)
 
     return annotation_documents
 
@@ -88,8 +88,12 @@ def sentence_is_annotated(sentence):
             return True
     return False
 
+def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
+    return machine_labeled_paragraph
+
 def add_annotation_document(document_list, raw_id, document_content):
-    payload = { 'content': document_content }
+    content = [document_content]
+    payload = {'content': content}
     encoded_payload = json.dumps(payload)
 
     document_list.append({
@@ -110,7 +114,7 @@ def deannotize(sentences):
 
     return plain_tokenized_sentences
 
-def named_entity_chunking(paragraph):
+def ne_chunking(paragraph):
     # create a list of lists of tuples
     pos_tagged_sentences = [ner_pipeline.part_of_speech_tagging(sentence) for sentence in paragraph]
 
