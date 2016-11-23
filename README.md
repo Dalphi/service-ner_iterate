@@ -6,7 +6,7 @@ This repo contains all the tools you need (currently it's based on some NLTK lib
 
 - Dalphi iterate and merge services (HTTP)  
   `python3 iterate_service.py -v -l`
-- text shaper to convert a plain text file to a JSON based exchange format
+- text shaper to convert a plain text file to a JSON based exchange format (described [here](https://github.com/Dalphi/interface-ner_complete#expected-payload))
   `python3 text_shaper.py input.txt output.json`
 - some Python libs for converting the text exchange format to NLTK's tree format and vice versa, handling HTTP communication and a NER pipeline (to easily exchange NLTK's MaxEnt-classifier)
 
@@ -30,7 +30,7 @@ Convert your plain text to Dalphi *raw data*
 - Assign those services in your project's settings.
 - Import all the raw data you generated using the text shaper.
 - Run an iteration by selecting the annotation document's tab and click the button within the blank slate.
-- Annotate : )
+- Annotate! We recommend the *NER_complete* interface for annotation. It's fully compatible to this service and lives free and open [here](https://github.com/Dalphi/interface-ner_complete).
 
 ## Read
 
