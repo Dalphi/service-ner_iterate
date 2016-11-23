@@ -64,8 +64,8 @@ def named_entity_token_chunking(tagged_sentence):
         chunker = nltk.data.load(NLTK_CHUNKER_PATH)
         return chunker.parse(tagged_sentence)
 
-def train_maxent_chunker(tokenized_paragraphs):
-    training_data_tree = nltk_tree_converter.corpus_to_tree(tokenized_paragraphs)
+def train_maxent_chunker(tokenized_sentences):
+    training_data_tree = nltk_tree_converter.sentences_to_tree(tokenized_sentences)
     pos_tagged_tree = maxent_chunker.postag_tree(training_data_tree)
     training_data = [pos_tagged_tree]
     return build_maxent_model(training_data)

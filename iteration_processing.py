@@ -6,6 +6,7 @@
 from pprint import pprint as pp
 import base64
 import json
+import logging
 
 # import project libs
 
@@ -47,8 +48,12 @@ def iterate_corpus(corpus):
 def training(corpus):
     # train a maxent classifier for chunking named entities with this current corpus
     decapsulated_corpus = decapsulate(corpus)
-    filtered_corpus = extract_annotated_senteces(decapsulated_corpus)
-    ner_pipeline.train_maxent_chunker(filtered_corpus)
+    annotated_senteces = extract_annotated_senteces(decapsulated_corpus)
+    pp(annotated_senteces)
+    if annotated_senteces:
+        ner_pipeline.train_maxent_chunker(annotated_senteces)
+    else:
+        logging.warning('No annotations found. Skip model training.')
 
 def decapsulate(corpus):
     listified_corpus = [listify(element) for element in corpus]
@@ -56,9 +61,11 @@ def decapsulate(corpus):
     if number_of_corpus_documents == 1:
         return listified_corpus[0]
     else:
-        # TODO Merge the elements of listified_corpus together.
-        # The result should be a list of paragraphs
-        return listified_corpus
+        list_of_paragraphs = []
+        for document_index in range (0, number_of_corpus_documents):
+            for paragraph in listified_corpus[document_index]:
+                list_of_paragraphs.append(paragraph)
+        return list_of_paragraphs
 
 def listify(obj):
     if isinstance(obj, dict):
@@ -67,9 +74,20 @@ def listify(obj):
     else:
         return obj
 
-def extract_annotated_senteces(paragraphs):
-    # TODO Filter unannotated senteces
-    return paragraphs
+def extract_annotated_senteces(corpus):
+    annotated_sentences = []
+    for paragraph in corpus:
+        for sentence in paragraph:
+            if sentence_is_annotated(sentence):
+                annotated_sentences.append(sentence)
+
+    return annotated_sentences
+
+def sentence_is_annotated(sentence):
+    for token in sentence:
+        if 'annotation' in token:
+            return True
+    return False
 
 def add_annotation_document(document_list, raw_id, document_content):
     payload = { 'content': document_content }

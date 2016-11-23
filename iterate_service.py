@@ -20,13 +20,14 @@ import merge_processing
 
 # defining globals & constants
 
+global app
 app = Flask(__name__)
 
 # Flask routes
 
 @app.route('/', methods=['GET'])
 def who_are_you():
-    app.logger.info('who are you request; respond with JSON')
+    logging.info('who are you request; respond with JSON')
     message = {
         'services': [
             {
@@ -56,11 +57,11 @@ def iterate_who_are_you():
 
 @app.route('/iterate', methods=['POST'])
 def iterate():
-    app.logger.info('iterate request')
+    logging.info('iterate request')
     corpus = iteration_processing.decode_post_data(request.json)
     documents = iteration_processing.iterate_corpus(corpus)
 
-    app.logger.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
+    logging.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
 
     response = { 'annotation_documents': documents }
     return create_json_respons_from(response)
@@ -79,9 +80,9 @@ def merge_who_are_you():
 
 @app.route('/merge', methods=['POST'])
 def merge():
-    app.logger.info('merge request')
+    logging.info('merge request')
     (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(request.json)
-    app.logger.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
+    logging.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
 
     raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
     return create_json_respons_from(raw_datum)
@@ -135,10 +136,8 @@ if __name__ == '__main__':
     if args.verbose:
         beVerbose = True
 
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    file_handler = logging.FileHandler('service.log')
-    file_handler.setFormatter(formatter)
-    app.logger.addHandler(file_handler)
-    app.logger.setLevel(logging.INFO)
-    app.logger.info('start running flask app')
+    logging.basicConfig(filename='service.log', level=logging.INFO)
+    logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.info('start running flask app')
     app.run(useHost, usePort, beVerbose)

@@ -18,27 +18,34 @@ def corpus_to_tree(corpus):
     tree_with_entities = Tree('S', [])
     skip_count = 0
     for paragraph in corpus:
-        for sentence in paragraph:
-            for index, token in enumerate(sentence):
-                if skip_count > 0:
-                    skip_count = skip_count - 1
-                    continue
+        sentences_to_tree(paragraph, tree_with_entities)
+    return tree_with_entities
 
-                if 'annotation' in token:
-                    annotation = token['annotation']
-                    length = annotation['length']
-                    sub_tree = Tree(annotation['label'], [token['term']])
+def sentences_to_tree(paragraph, tree_with_entities = Tree('S', [])):
+    tree_with_entities = Tree('S', [])
+    skip_count = 0
 
-                    if length > 1:
-                        skip_count = length - 1
-                        for next_index in range((index + 1), (index + length)):
-                            word = sentence[next_index]['term']
-                            sub_tree.append(word)
+    for sentence in paragraph:
+        for index, token in enumerate(sentence):
+            if skip_count > 0:
+                skip_count = skip_count - 1
+                continue
 
-                    tree_with_entities.append(sub_tree)
+            if 'annotation' in token:
+                annotation = token['annotation']
+                length = annotation['length']
+                sub_tree = Tree(annotation['label'], [token['term']])
 
-                else:
-                    tree_with_entities.extend([token['term']])
+                if length > 1:
+                    skip_count = length - 1
+                    for next_index in range((index + 1), (index + length)):
+                        word = sentence[next_index]['term']
+                        sub_tree.append(word)
+
+                tree_with_entities.append(sub_tree)
+
+            else:
+                tree_with_entities.extend([token['term']])
 
     return tree_with_entities
 
