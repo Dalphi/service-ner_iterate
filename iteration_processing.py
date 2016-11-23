@@ -49,7 +49,6 @@ def training(corpus):
     # train a maxent classifier for chunking named entities with this current corpus
     decapsulated_corpus = decapsulate(corpus)
     annotated_senteces = extract_annotated_senteces(decapsulated_corpus)
-    pp(annotated_senteces)
     if annotated_senteces:
         ner_pipeline.train_maxent_chunker(annotated_senteces)
     else:
