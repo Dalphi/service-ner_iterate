@@ -14,6 +14,16 @@ This repo contains all the tools you need (currently it's based on some NLTK lib
 
 ### Prepare
 
+You may need download some nltk specific resources by running
+
+```
+python3
+>>> import nltk
+>>> nltk.download()
+```
+
+and following the installation instructions.
+
 Convert your plain text to Dalphi *raw data*
 
 `python3 text_shaper.py input.txt output.json`
