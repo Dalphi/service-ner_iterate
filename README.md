@@ -10,9 +10,7 @@ This repo contains all the tools you need (currently it's based on some NLTK lib
   `python3 text_shaper.py input.txt output.json`
 - some Python libs for converting the text exchange format to NLTK's tree format and vice versa, handling HTTP communication and a NER pipeline (to easily exchange NLTK's MaxEnt-classifier)
 
-## Usage
-
-### Prepare
+## Prerequisites installation
 
 You may need download some nltk specific resources by running
 
@@ -23,6 +21,17 @@ python3
 ```
 
 and following the installation instructions.
+
+It could be necessary to provide a binary for [MegaM](https://www.umiacs.umd.edu/~hal/megam/).
+Simply download or build it and provide its location by an environment variable, e.g. like
+
+```
+export MEGAM=~/.local/bin/megam
+```
+
+## Usage
+
+### Prepare
 
 Convert your plain text to Dalphi *raw data*
 
