@@ -38,10 +38,18 @@ def iterate_corpus(corpus):
         document_content = corpus_document['content']
 
         for paragraph in document_content['content']:
+            human_checked = paragraph_was_human_checked(paragraph)
+
             plain_tokenized_sentences = deannotize(paragraph)
             ne_chunked_paragraph = ne_chunking(plain_tokenized_sentences)
+
             annotated_paragraph = prefere_human_annotations(paragraph, ne_chunked_paragraph)
-            add_annotation_document(annotation_documents, raw_datum_id, annotated_paragraph)
+            add_annotation_document(
+                annotation_documents,
+                raw_datum_id,
+                annotated_paragraph,
+                human_checked
+            )
 
     return annotation_documents
 
@@ -87,27 +95,40 @@ def sentence_is_annotated(sentence):
             return True
     return False
 
-def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
-    if len(human_checked_paragraph) != len(machine_labeled_paragraph):
-        logging.error('prefere_human_annotations: human_checked_paragraph and machine_labeled_paragraph have different shapes!')
-        return human_checked_paragraph
+def paragraph_was_human_checked(paragraph):
+    # Checking if the pre-ML-chunked sentence already contains annotations is a good estimator
+    # but paragraphs which don't contain any entities won't be recognized by this metric.
+    for sentence in paragraph:
+        if sentence_is_annotated(sentence): return True
+    return False
 
-    for sentence_index, sentence in enumerate(human_checked_paragraph):
-        for token_index, token in enumerate(sentence):
-            if 'annotation' in token:
-                # overwrite the token in the ML chunked sentence with the human checked token
-                # this doesn't cares about annotation length's - might become an issue
-                machine_labeled_paragraph[sentence_index][token_index] = token
+# construct a paragraph containing all human made annotations, enriched by all other artificial annotations
+def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
+    if len(human_checked_paragraph) == len(machine_labeled_paragraph):
+        for sentence_index, sentence in enumerate(human_checked_paragraph):
+            for token_index, token in enumerate(sentence):
+                if 'annotation' in token:
+                    # Overwriting the token in the ML chunked sentence with the human checked token
+                    # this doesn't care about annotation lengths - might become an issue.
+                    machine_labeled_paragraph[sentence_index][token_index] = token
+
+    else:
+        logging.error('prefere_human_annotations: human_checked_paragraph and machine_labeled_paragraph have different shapes!')
+        machine_labeled_paragraph = human_checked_paragraph
 
     return machine_labeled_paragraph
 
-def add_annotation_document(document_list, raw_id, document_content):
+def add_annotation_document(document_list, raw_id, document_content, human_checked):
     content = [document_content]
     payload = {'content': content}
     encoded_payload = json.dumps(payload)
+    rank = len(document_list)
+
+    if human_checked:
+        rank = rank + 1000
 
     document_list.append({
-        'rank': len(document_list),
+        'rank': rank,
         'raw_datum_id': raw_id,
         'payload': encoded_payload,
         'interface_type': 'ner_complete'
