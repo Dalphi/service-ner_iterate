@@ -88,10 +88,17 @@ def sentence_is_annotated(sentence):
     return False
 
 def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
+    if len(human_checked_paragraph) != len(machine_labeled_paragraph):
+        logging.error('prefere_human_annotations: human_checked_paragraph and machine_labeled_paragraph have different shapes!')
+        return human_checked_paragraph
+
     for sentence_index, sentence in enumerate(human_checked_paragraph):
         for token_index, token in enumerate(sentence):
             if 'annotation' in token:
-                return True
+                # overwrite the token in the ML chunked sentence with the human checked token
+                # this doesn't cares about annotation length's - might become an issue
+                machine_labeled_paragraph[sentence_index][token_index] = token
+
     return machine_labeled_paragraph
 
 def add_annotation_document(document_list, raw_id, document_content):

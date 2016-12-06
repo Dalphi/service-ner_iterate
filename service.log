@@ -86,3 +86,62 @@ INFO:root:transmitted corpus contains 4 documents; created 20 annotation documen
 INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:23] "POST /iterate HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:08:31] "GET /iterate HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:08:31] "GET /merge HTTP/1.1" 200 -
+INFO:root:start running flask app
+INFO:werkzeug: * Running on http://localhost:5001/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:start running flask app
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 256-552-943
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:15] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:15] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:26] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:26] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:27] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:27] "GET /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 4 documents; created 20 annotation documents
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:32:35] "POST /iterate HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 6 documents as parts of raw datum #313
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:47:01] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 7 documents as parts of raw datum #314
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:47:01] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 4 documents as parts of raw datum #315
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:47:01] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 3 documents as parts of raw datum #316
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:47:01] "POST /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 4 documents; created 20 annotation documents
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:47:09] "POST /iterate HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 6 documents as parts of raw datum #313
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:50:45] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 7 documents as parts of raw datum #314
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:50:45] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 4 documents as parts of raw datum #315
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:50:45] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 3 documents as parts of raw datum #316
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:50:45] "POST /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 4 documents; created 20 annotation documents
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:50:50] "POST /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:18] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:18] "GET /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 6 documents as parts of raw datum #313
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:22] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 7 documents as parts of raw datum #314
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:22] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 4 documents as parts of raw datum #315
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:22] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 3 documents as parts of raw datum #316
+INFO:werkzeug:127.0.0.1 - - [06/Dec/2016 13:52:22] "POST /merge HTTP/1.1" 200 -
