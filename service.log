@@ -20,3 +20,69 @@ WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger pin code: 256-552-943
 INFO:werkzeug: * Detected change in '/Users/rg/GitRepos/Implisense/service-ner_iterate/iteration_processing.py', reloading
 INFO:werkzeug: * Restarting with stat
+INFO:root:start running flask app
+INFO:werkzeug: * Running on http://localhost:5001/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:root:start running flask app
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 256-552-943
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:36:42] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:36:42] "GET /iterate HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 2 documents; created 13 annotation documents
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:36:48] "POST /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:40:24] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:40:24] "GET /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 3 documents; created 17 annotation documents
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:41:17] "POST /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:45:29] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:45:29] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:46:19] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:46:19] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:51:15] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 13:51:15] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 17:58:51] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 17:58:51] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:00:26] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:00:26] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:14] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:14] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:35] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:35] "GET /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 6 documents as parts of raw datum #313
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:58] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 7 documents as parts of raw datum #314
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:58] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 4 documents as parts of raw datum #315
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:01:58] "POST /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 3 documents; created 17 annotation documents
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:02:23] "POST /iterate HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 4 documents; created 20 annotation documents
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:04:49] "POST /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:06:45] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:06:45] "GET /merge HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:11] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:11] "GET /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 6 documents as parts of raw datum #313
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:14] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 7 documents as parts of raw datum #314
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:14] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 4 documents as parts of raw datum #315
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:14] "POST /merge HTTP/1.1" 200 -
+INFO:root:merge request
+INFO:root:received 3 documents as parts of raw datum #316
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:14] "POST /merge HTTP/1.1" 200 -
+INFO:root:iterate request
+INFO:root:transmitted corpus contains 4 documents; created 20 annotation documents
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:07:23] "POST /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:08:31] "GET /iterate HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2016 18:08:31] "GET /merge HTTP/1.1" 200 -

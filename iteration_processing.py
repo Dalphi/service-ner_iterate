@@ -45,8 +45,8 @@ def iterate_corpus(corpus):
 
     return annotation_documents
 
+# train a maxent classifier for chunking named entities with this current corpus
 def training(corpus):
-    # train a maxent classifier for chunking named entities with this current corpus
     decapsulated_corpus = decapsulate(corpus)
     annotated_senteces = extract_annotated_senteces(decapsulated_corpus)
     if annotated_senteces:
@@ -54,18 +54,16 @@ def training(corpus):
     else:
         logging.warning('No annotations found. Skip model training.')
 
+# merge all paragraphs of different documents together; return a list of paragraphs
 def decapsulate(corpus):
     listified_corpus = [listify(element) for element in corpus]
-    number_of_corpus_documents = len(listified_corpus)
-    if number_of_corpus_documents == 1:
-        return listified_corpus[0]
-    else:
-        list_of_paragraphs = []
-        for document_index in range (0, number_of_corpus_documents):
-            for paragraph in listified_corpus[document_index]:
-                list_of_paragraphs.append(paragraph)
-        return list_of_paragraphs
+    list_of_paragraphs = []
+    for document_index in range (0, len(listified_corpus)):
+        for paragraph in listified_corpus[document_index]:
+            list_of_paragraphs.append(paragraph)
+    return list_of_paragraphs
 
+# remove everything but plain text structure
 def listify(obj):
     if isinstance(obj, dict):
         inner_object = obj['content']
@@ -73,9 +71,10 @@ def listify(obj):
     else:
         return obj
 
-def extract_annotated_senteces(corpus):
+# return a list of annotated sentences of a document
+def extract_annotated_senteces(document):
     annotated_sentences = []
-    for paragraph in corpus:
+    for paragraph in document:
         for sentence in paragraph:
             if sentence_is_annotated(sentence):
                 annotated_sentences.append(sentence)
@@ -89,6 +88,10 @@ def sentence_is_annotated(sentence):
     return False
 
 def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
+    for sentence_index, sentence in enumerate(human_checked_paragraph):
+        for token_index, token in enumerate(sentence):
+            if 'annotation' in token:
+                return True
     return machine_labeled_paragraph
 
 def add_annotation_document(document_list, raw_id, document_content):
@@ -103,6 +106,7 @@ def add_annotation_document(document_list, raw_id, document_content):
         'interface_type': 'ner_complete'
     })
 
+# remove annotations from a sentence
 def deannotize(sentences):
     plain_tokenized_sentences = []
     for sentence in sentences:
