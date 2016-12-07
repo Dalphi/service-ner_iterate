@@ -33,20 +33,28 @@ def iterate_corpus(corpus):
     training(corpus)
 
     annotation_documents = []
-    for index, corpus_document in enumerate(corpus):
+    for corpus_document in corpus:
         raw_datum_id = corpus_document['raw_datum_id']
         document_content = corpus_document['content']
 
         for paragraph in document_content['content']:
+            human_checked = paragraph_was_human_checked(paragraph)
+
             plain_tokenized_sentences = deannotize(paragraph)
-            chunked_sentences = named_entity_chunking(plain_tokenized_sentences)
-            target_content = [ chunked_sentences ]
-            add_annotation_document(annotation_documents, raw_datum_id, target_content)
+            ne_chunked_paragraph = ne_chunking(plain_tokenized_sentences)
+
+            annotated_paragraph = prefere_human_annotations(paragraph, ne_chunked_paragraph)
+            add_annotation_document(
+                annotation_documents,
+                raw_datum_id,
+                annotated_paragraph,
+                human_checked
+            )
 
     return annotation_documents
 
+# train a maxent classifier for chunking named entities with this current corpus
 def training(corpus):
-    # train a maxent classifier for chunking named entities with this current corpus
     decapsulated_corpus = decapsulate(corpus)
     annotated_senteces = extract_annotated_senteces(decapsulated_corpus)
     if annotated_senteces:
@@ -54,18 +62,16 @@ def training(corpus):
     else:
         logging.warning('No annotations found. Skip model training.')
 
+# merge all paragraphs of different documents together; return a list of paragraphs
 def decapsulate(corpus):
     listified_corpus = [listify(element) for element in corpus]
-    number_of_corpus_documents = len(listified_corpus)
-    if number_of_corpus_documents == 1:
-        return listified_corpus[0]
-    else:
-        list_of_paragraphs = []
-        for document_index in range (0, number_of_corpus_documents):
-            for paragraph in listified_corpus[document_index]:
-                list_of_paragraphs.append(paragraph)
-        return list_of_paragraphs
+    list_of_paragraphs = []
+    for document_index in range (0, len(listified_corpus)):
+        for paragraph in listified_corpus[document_index]:
+            list_of_paragraphs.append(paragraph)
+    return list_of_paragraphs
 
+# remove everything but plain text structure
 def listify(obj):
     if isinstance(obj, dict):
         inner_object = obj['content']
@@ -73,9 +79,10 @@ def listify(obj):
     else:
         return obj
 
-def extract_annotated_senteces(corpus):
+# return a list of annotated sentences of a document
+def extract_annotated_senteces(document):
     annotated_sentences = []
-    for paragraph in corpus:
+    for paragraph in document:
         for sentence in paragraph:
             if sentence_is_annotated(sentence):
                 annotated_sentences.append(sentence)
@@ -88,17 +95,46 @@ def sentence_is_annotated(sentence):
             return True
     return False
 
-def add_annotation_document(document_list, raw_id, document_content):
-    payload = { 'content': document_content }
+def paragraph_was_human_checked(paragraph):
+    # Checking if the pre-ML-chunked sentence already contains annotations is a good estimator
+    # but paragraphs which don't contain any entities won't be recognized by this metric.
+    for sentence in paragraph:
+        if sentence_is_annotated(sentence): return True
+    return False
+
+# construct a paragraph containing all human made annotations, enriched by all other artificial annotations
+def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph):
+    if len(human_checked_paragraph) == len(machine_labeled_paragraph):
+        for sentence_index, sentence in enumerate(human_checked_paragraph):
+            for token_index, token in enumerate(sentence):
+                if 'annotation' in token:
+                    # Overwriting the token in the ML chunked sentence with the human checked token
+                    # this doesn't care about annotation lengths - might become an issue.
+                    machine_labeled_paragraph[sentence_index][token_index] = token
+
+    else:
+        logging.error('prefere_human_annotations: human_checked_paragraph and machine_labeled_paragraph have different shapes!')
+        machine_labeled_paragraph = human_checked_paragraph
+
+    return machine_labeled_paragraph
+
+def add_annotation_document(document_list, raw_id, document_content, human_checked):
+    content = [document_content]
+    payload = {'content': content}
     encoded_payload = json.dumps(payload)
+    rank = len(document_list)
+
+    if human_checked:
+        rank = rank + 1000
 
     document_list.append({
-        'rank': len(document_list),
+        'rank': rank,
         'raw_datum_id': raw_id,
         'payload': encoded_payload,
         'interface_type': 'ner_complete'
     })
 
+# remove annotations from a sentence
 def deannotize(sentences):
     plain_tokenized_sentences = []
     for sentence in sentences:
@@ -110,7 +146,7 @@ def deannotize(sentences):
 
     return plain_tokenized_sentences
 
-def named_entity_chunking(paragraph):
+def ne_chunking(paragraph):
     # create a list of lists of tuples
     pos_tagged_sentences = [ner_pipeline.part_of_speech_tagging(sentence) for sentence in paragraph]
 

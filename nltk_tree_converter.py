@@ -5,6 +5,7 @@
 
 from nltk import Tree
 from pprint import pprint as pp
+import logging
 
 # import project libs
 # -
@@ -33,6 +34,10 @@ def sentences_to_tree(paragraph, tree_with_entities = Tree('S', [])):
 
             if 'annotation' in token:
                 annotation = token['annotation']
+                if annotation['label'] == 'NAE':
+                    logging.info('nltk_tree_converter.sentences_to_tree: skipping NAE label')
+                    continue
+
                 length = annotation['length']
                 sub_tree = Tree(annotation['label'], [token['term']])
 
