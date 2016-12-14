@@ -7,6 +7,7 @@ from pprint import pprint as pp
 import base64
 import json
 import logging
+import random
 
 # import project libs
 
@@ -52,6 +53,18 @@ def iterate_corpus(corpus):
             )
 
     return annotation_documents
+
+# returns just some dummy statistics in order to test interoperability
+def iterate_statistics(documents):
+    raw_data_ids = list(set(map(lambda document: document['raw_datum_id'], documents)))
+    return [
+        {
+            'key': 'test',
+            'value': random.uniform(0, 1),
+            'raw_data_ids': raw_data_ids,
+            'iteration_index': random.randint(0, 123465789)
+        }
+    ]
 
 # train a maxent classifier for chunking named entities with this current corpus
 def training(corpus):
@@ -121,7 +134,6 @@ def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph
 def add_annotation_document(document_list, raw_id, document_content, human_checked):
     content = [document_content]
     payload = {'content': content}
-    encoded_payload = json.dumps(payload)
     rank = len(document_list)
 
     if human_checked:
@@ -130,7 +142,7 @@ def add_annotation_document(document_list, raw_id, document_content, human_check
     document_list.append({
         'rank': rank,
         'raw_datum_id': raw_id,
-        'payload': encoded_payload,
+        'payload': payload,
         'interface_type': 'ner_complete'
     })
 

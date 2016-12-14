@@ -66,8 +66,11 @@ def iterate():
         def async_processing(data):
             corpus = iteration_processing.decode_post_data(data['raw_data'])
             documents = iteration_processing.iterate_corpus(corpus)
-            response = { 'annotation_documents': documents }
-            res = requests.post(data['callback_url'], data=json.dumps(response), headers={ 'Content-Type': 'application/json' })
+            annotation_documents = { 'annotation_documents': documents }
+            statistics = { 'statistics': iteration_processing.iterate_statistics(documents) }
+            res = requests.post(data['callback_urls'][0], data=json.dumps(annotation_documents), headers={ 'Content-Type': 'application/json' })
+            pp(statistics)
+            res = requests.post(data['callback_urls'][1], data=json.dumps(statistics), headers={ 'Content-Type': 'application/json' })
         data = request.json
         threading.Thread(target=async_processing, args=(data,)).start()
         return create_json_response_from({ 'status': 'async' })
@@ -75,10 +78,11 @@ def iterate():
         logging.info('process during request')
         corpus = iteration_processing.decode_post_data(request.json['raw_data'])
         documents = iteration_processing.iterate_corpus(corpus)
+        statistics = iteration_processing.iterate_statistics(documents)
 
         logging.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
 
-        response = { 'annotation_documents': documents }
+        response = { 'annotation_documents': documents, 'statistics': statistics }
         return create_json_response_from(response)
 
 @app.route('/merge', methods=['GET'])
