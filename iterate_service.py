@@ -60,30 +60,35 @@ def iterate_who_are_you():
 
 @app.route('/iterate', methods=['POST'])
 def iterate():
-    logging.info('iterate request')
     if args.async:
-        logging.info('process asynchronously')
-        def async_processing(data):
-            corpus = iteration_processing.decode_post_data(data['raw_data'])
-            documents = iteration_processing.iterate_corpus(corpus)
-            annotation_documents = { 'annotation_documents': documents }
-            statistics = { 'statistics': iteration_processing.iterate_statistics(documents) }
-            res = requests.post(data['callback_urls'][0], data=json.dumps(annotation_documents), headers={ 'Content-Type': 'application/json' })
-            pp(statistics)
-            res = requests.post(data['callback_urls'][1], data=json.dumps(statistics), headers={ 'Content-Type': 'application/json' })
+        logging.info('iterate request (async)')
         data = request.json
-        threading.Thread(target=async_processing, args=(data,)).start()
+        threading.Thread(target=async_iteration_processing, args=(data,)).start()
         return create_json_response_from({ 'status': 'async' })
+
     else:
-        logging.info('process during request')
-        corpus = iteration_processing.decode_post_data(request.json['raw_data'])
-        documents = iteration_processing.iterate_corpus(corpus)
-        statistics = iteration_processing.iterate_statistics(documents)
+        logging.info('iterate request (request)')
+        (documents, statistics) = iteration_processing.process_iteration(request.json['raw_data'])
+        return create_json_response_from({
+            'annotation_documents': documents,
+            'statistics': statistics
+        })
 
-        logging.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
+def async_iteration_processing(data):
+    (documents, statistics) = iteration_processing.process_iteration(data['raw_data'])
+    annotation_documents = { 'annotation_documents': documents }
+    res = requests.post(
+        data['callback_urls'][0],
+        data=json.dumps(annotation_documents),
+        headers={ 'Content-Type': 'application/json' }
+    )
 
-        response = { 'annotation_documents': documents, 'statistics': statistics }
-        return create_json_response_from(response)
+    statistics = { 'statistics': statistics }
+    res = requests.post(
+        data['callback_urls'][1],
+        data=json.dumps(statistics),
+        headers={ 'Content-Type': 'application/json' }
+    )
 
 @app.route('/merge', methods=['GET'])
 def merge_who_are_you():
@@ -120,18 +125,12 @@ if __name__ == '__main__':
     useHost = 'localhost'
     parser = argparse.ArgumentParser(
         description='Dalphi Iterate Service; 13.10.16 Robert Greinacher')
-
     parser.add_argument(
-        '-p',
-        '--port',
-        type=int,
-        help='set the network port number')
-    parser.add_argument(
-        '-l',
-        '--localhost',
+        '-a',
+        '--async',
         action='store_true',
-        dest='localhost',
-        help='use "localhost" instead of current network IP')
+        dest='async',
+        help='communicates asynchronous and non-blocking with DALPHI')
     parser.add_argument(
         '-d',
         '--daemon',
@@ -139,17 +138,22 @@ if __name__ == '__main__':
         dest='daemon',
         help='enables daemon mode')
     parser.add_argument(
+        '-l',
+        '--localhost',
+        action='store_true',
+        dest='localhost',
+        help='use "localhost" instead of current network IP')
+    parser.add_argument(
+        '-p',
+        '--port',
+        type=int,
+        help='set the network port number')
+    parser.add_argument(
         '-v',
         '--verbose',
         action='store_true',
         dest='verbose',
         help='enables verbose mode')
-    parser.add_argument(
-        '-a',
-        '--async',
-        action='store_true',
-        dest='async',
-        help='communicates asynchronous and non-blocking with DALPHI')
     args = parser.parse_args()
 
     if args.port:

@@ -15,9 +15,16 @@ import ner_pipeline
 import nltk_tree_converter
 
 # defining globals & constants
-# -
+
+NEW_DOCUMENTS_LIMIT = 3
 
 # methods
+
+def process_iteration(raw_data):
+    corpus = decode_post_data(raw_data)
+    documents = iterate_corpus(corpus)
+    statistics = iterate_statistics(documents)
+    return (documents, statistics)
 
 def decode_post_data(request_json):
     post_json_data = json.dumps(request_json)
@@ -51,6 +58,9 @@ def iterate_corpus(corpus):
                 annotated_paragraph,
                 human_checked
             )
+
+            if limit_criterium(annotation_documents): break
+        if limit_criterium(annotation_documents): break
 
     return annotation_documents
 
@@ -167,3 +177,6 @@ def ne_chunking(paragraph):
 
     # convert chunk trees back to sentences (list of lists of token objects)
     return [nltk_tree_converter.tree_to_sentence(tree) for tree in chunk_trees]
+
+def limit_criterium(documents):
+    return NEW_DOCUMENTS_LIMIT > 0 and len(documents) == NEW_DOCUMENTS_LIMIT
