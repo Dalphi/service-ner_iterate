@@ -11,6 +11,8 @@ import argparse
 import json
 import logging
 import socket
+import requests
+import threading
 
 # import project libs
 
@@ -21,6 +23,7 @@ import merge_processing
 # defining globals & constants
 
 global app
+global args
 app = Flask(__name__)
 
 # Flask routes
@@ -41,7 +44,7 @@ def who_are_you():
         ]
     }
 
-    return create_json_respons_from(message)
+    return create_json_response_from(message)
 
 @app.route('/iterate', methods=['GET'])
 def iterate_who_are_you():
@@ -53,18 +56,39 @@ def iterate_who_are_you():
         'problem_id': 'ner',
         'interface_types': [ 'ner_complete', 'ner_paragraph' ]
     }
-    return create_json_respons_from(message)
+    return create_json_response_from(message)
 
 @app.route('/iterate', methods=['POST'])
 def iterate():
-    logging.info('iterate request')
-    corpus = iteration_processing.decode_post_data(request.json)
-    documents = iteration_processing.iterate_corpus(corpus)
+    if args.async:
+        logging.info('iterate request (async)')
+        data = request.json
+        threading.Thread(target=async_iteration_processing, args=(data,)).start()
+        return create_json_response_from({ 'status': 'async' })
 
-    logging.info('transmitted corpus contains %s documents; created %s annotation documents' % (len(corpus), len(documents)))
+    else:
+        logging.info('iterate request (request)')
+        (documents, statistics) = iteration_processing.process_iteration(request.json['raw_data'])
+        return create_json_response_from({
+            'annotation_documents': documents,
+            'statistics': statistics
+        })
 
-    response = { 'annotation_documents': documents }
-    return create_json_respons_from(response)
+def async_iteration_processing(data):
+    (documents, statistics) = iteration_processing.process_iteration(data['raw_data'])
+    annotation_documents = { 'annotation_documents': documents }
+    res = requests.post(
+        data['callback_urls'][0],
+        data=json.dumps(annotation_documents),
+        headers={ 'Content-Type': 'application/json' }
+    )
+
+    statistics = { 'statistics': statistics }
+    res = requests.post(
+        data['callback_urls'][1],
+        data=json.dumps(statistics),
+        headers={ 'Content-Type': 'application/json' }
+    )
 
 @app.route('/merge', methods=['GET'])
 def merge_who_are_you():
@@ -76,7 +100,7 @@ def merge_who_are_you():
         'version': 0.1,
         'problem_id': 'ner'
     }
-    return create_json_respons_from(message)
+    return create_json_response_from(message)
 
 @app.route('/merge', methods=['POST'])
 def merge():
@@ -85,11 +109,11 @@ def merge():
     logging.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
 
     raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
-    return create_json_respons_from(raw_datum)
+    return create_json_response_from(raw_datum)
 
 # helpers
 
-def create_json_respons_from(hash):
+def create_json_response_from(hash):
     response = jsonify(hash)
     response.status_code = 200
     return response
@@ -97,17 +121,22 @@ def create_json_respons_from(hash):
 # entry point as a stand alone script
 
 if __name__ == '__main__':
-    beVerbose = False
     usePort = 5001
     useHost = 'localhost'
     parser = argparse.ArgumentParser(
         description='Dalphi Iterate Service; 13.10.16 Robert Greinacher')
-
     parser.add_argument(
-        '-p',
-        '--port',
-        type=int,
-        help='set the network port number')
+        '-a',
+        '--async',
+        action='store_true',
+        dest='async',
+        help='communicates asynchronous and non-blocking with DALPHI')
+    parser.add_argument(
+        '-d',
+        '--daemon',
+        action='store_true',
+        dest='daemon',
+        help='enables daemon mode')
     parser.add_argument(
         '-l',
         '--localhost',
@@ -115,11 +144,10 @@ if __name__ == '__main__':
         dest='localhost',
         help='use "localhost" instead of current network IP')
     parser.add_argument(
-        '-d',
-        '--daemon',
-        action='store_true',
-        dest='daemon',
-        help='enables daemon mode')
+        '-p',
+        '--port',
+        type=int,
+        help='set the network port number')
     parser.add_argument(
         '-v',
         '--verbose',
@@ -133,11 +161,9 @@ if __name__ == '__main__':
     if not args.localhost:
         hostename = socket.gethostname()
         useHost = socket.gethostbyname(hostename)
-    if args.verbose:
-        beVerbose = True
 
     logging.basicConfig(filename='service.log', level=logging.INFO)
     logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.info('start running flask app')
-    app.run(useHost, usePort, beVerbose)
+    app.run(useHost, usePort, args.verbose)

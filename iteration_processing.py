@@ -7,6 +7,7 @@ from pprint import pprint as pp
 import base64
 import json
 import logging
+import random
 
 # import project libs
 
@@ -14,9 +15,16 @@ import ner_pipeline
 import nltk_tree_converter
 
 # defining globals & constants
-# -
+
+NEW_DOCUMENTS_LIMIT = 3
 
 # methods
+
+def process_iteration(raw_data):
+    corpus = decode_post_data(raw_data)
+    documents = iterate_corpus(corpus)
+    statistics = iterate_statistics(documents)
+    return (documents, statistics)
 
 def decode_post_data(request_json):
     post_json_data = json.dumps(request_json)
@@ -51,7 +59,22 @@ def iterate_corpus(corpus):
                 human_checked
             )
 
+            if limit_criterium(annotation_documents): break
+        if limit_criterium(annotation_documents): break
+
     return annotation_documents
+
+# returns just some dummy statistics in order to test interoperability
+def iterate_statistics(documents):
+    raw_data_ids = list(set(map(lambda document: document['raw_datum_id'], documents)))
+    return [
+        {
+            'key': 'test',
+            'value': random.uniform(0, 1),
+            'raw_data_ids': raw_data_ids,
+            'iteration_index': random.randint(0, 123465789)
+        }
+    ]
 
 # train a maxent classifier for chunking named entities with this current corpus
 def training(corpus):
@@ -121,7 +144,6 @@ def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph
 def add_annotation_document(document_list, raw_id, document_content, human_checked):
     content = [document_content]
     payload = {'content': content}
-    encoded_payload = json.dumps(payload)
     rank = len(document_list)
 
     if human_checked:
@@ -130,7 +152,7 @@ def add_annotation_document(document_list, raw_id, document_content, human_check
     document_list.append({
         'rank': rank,
         'raw_datum_id': raw_id,
-        'payload': encoded_payload,
+        'payload': payload,
         'interface_type': 'ner_complete'
     })
 
@@ -155,3 +177,6 @@ def ne_chunking(paragraph):
 
     # convert chunk trees back to sentences (list of lists of token objects)
     return [nltk_tree_converter.tree_to_sentence(tree) for tree in chunk_trees]
+
+def limit_criterium(documents):
+    return NEW_DOCUMENTS_LIMIT > 0 and len(documents) == NEW_DOCUMENTS_LIMIT
