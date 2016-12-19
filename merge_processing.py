@@ -34,10 +34,9 @@ def create_new_raw_datum(raw_datum_id, annotation_documents):
 
         if document['raw_datum_id'] == raw_datum_id:
             json_encoded_payload = document['payload']
-            payload = json.JSONDecoder().decode(json_encoded_payload)
 
             # the `content` of an annotation document holds only one paragraph
-            paragraph = payload['content'][0]
+            paragraph = json_encoded_payload['content'][0]
             content.append(paragraph)
 
     raw_datum = {
