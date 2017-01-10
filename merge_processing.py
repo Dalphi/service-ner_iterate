@@ -23,7 +23,7 @@ def decode_post_data(request_json):
     post_json_data = json.dumps(request_json)
     dict_content = json.JSONDecoder().decode(post_json_data)
     annotation_documents = dict_content['annotation_documents']
-    raw_datum_id = dict_content['corpus_document']['raw_datum_id']
+    raw_datum_id = dict_content['raw_datum']['id']
     return (raw_datum_id, annotation_documents)
 
 def create_new_raw_datum(raw_datum_id, annotation_documents):
