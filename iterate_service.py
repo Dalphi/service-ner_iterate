@@ -123,7 +123,6 @@ def async_merge_processing(data):
     logging.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
 
     raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
-    pp(raw_datum)
     res = requests.patch(
         data['callback_url'],
         data=json.dumps(raw_datum),

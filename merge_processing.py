@@ -40,8 +40,8 @@ def create_new_raw_datum(raw_datum_id, annotation_documents):
             content.append(paragraph)
 
     raw_datum = {
-        'content': content,
-        'raw_datum_id': raw_datum_id
+        'data': content,
+        'id': raw_datum_id
     }
 
     byte_encoded_content = json.dumps(raw_datum).encode('utf-8')
@@ -49,8 +49,8 @@ def create_new_raw_datum(raw_datum_id, annotation_documents):
     string_content = str(b64_encoded_content, encoding='utf-8')
 
     return {
-        'content': string_content,
-        'raw_datum_id': raw_datum_id
+        'data': string_content,
+        'id': raw_datum_id
     }
 
 def save_document_to_file(document):
