@@ -42,7 +42,7 @@ def shape(raw_text):
 def raw_data_json_from(shaped_sentences, input_file_name):
     raw_datum = {
         'id': input_file_name,
-        'content': shaped_sentences
+        'data': shaped_sentences
     }
 
     return json.dumps(raw_datum)
