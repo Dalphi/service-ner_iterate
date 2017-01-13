@@ -16,7 +16,7 @@ import nltk_tree_converter
 
 # defining globals & constants
 
-NEW_DOCUMENTS_LIMIT = 3
+NEW_DOCUMENTS_LIMIT = 0
 
 # methods
 
