@@ -27,25 +27,22 @@ def process_iteration(raw_data):
     return (documents, statistics)
 
 def decode_post_data(request_json):
-    post_json_data = json.dumps(request_json)
-    dict_content = json.JSONDecoder().decode(post_json_data)
-    for raw_datum in dict_content:
-        encoded_content = raw_datum['content']
+    for raw_datum in request_json:
+        encoded_content = raw_datum['data']
         deconded_content = base64.b64decode(encoded_content).decode('utf-8')
         deconded_content = json.JSONDecoder().decode(deconded_content)
-        raw_datum['content'] = deconded_content
-
-    return dict_content
+        raw_datum['data'] = deconded_content
+    return request_json
 
 def iterate_corpus(corpus):
     training(corpus)
 
     annotation_documents = []
     for corpus_document in corpus:
-        raw_datum_id = corpus_document['raw_datum_id']
-        document_content = corpus_document['content']
+        raw_datum_id = corpus_document['id']
+        document_content = corpus_document['data']
 
-        for paragraph in document_content['content']:
+        for paragraph in document_content['data']:
             human_checked = paragraph_was_human_checked(paragraph)
 
             plain_tokenized_sentences = deannotize(paragraph)
@@ -97,7 +94,10 @@ def decapsulate(corpus):
 # remove everything but plain text structure
 def listify(obj):
     if isinstance(obj, dict):
-        inner_object = obj['content']
+        if 'content' in obj.keys():
+            inner_object = obj['content']
+        elif 'data' in obj.keys():
+            inner_object = obj['data']
         return listify(inner_object)
     else:
         return obj

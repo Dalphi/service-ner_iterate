@@ -104,12 +104,30 @@ def merge_who_are_you():
 
 @app.route('/merge', methods=['POST'])
 def merge():
-    logging.info('merge request')
-    (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(request.json)
+    if args.async:
+        logging.info('merge request (async)')
+        data = request.json
+        threading.Thread(target=async_merge_processing, args=(data,)).start()
+        return create_json_response_from({ 'status': 'async' })
+
+    else:
+        logging.info('merge request (request)')
+        (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(request.json)
+        logging.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
+
+        raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
+        return create_json_response_from(raw_datum)
+
+def async_merge_processing(data):
+    (raw_datum_id, annotation_documents) = merge_processing.decode_post_data(data)
     logging.info('received %s documents as parts of raw datum #%s' % (len(annotation_documents), raw_datum_id))
 
     raw_datum = merge_processing.create_new_raw_datum(raw_datum_id, annotation_documents)
-    return create_json_response_from(raw_datum)
+    res = requests.patch(
+        data['callback_url'],
+        data=json.dumps(raw_datum),
+        headers={ 'Content-Type': 'application/json' }
+    )
 
 # helpers
 
