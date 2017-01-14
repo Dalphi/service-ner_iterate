@@ -17,7 +17,7 @@ import nltk_tree_converter
 # defining globals & constants
 
 NEW_DOCUMENTS_LIMIT = 0
-PASS_THROUGH_ONLY = False # don't do NER but use the already present labels
+PASS_THROUGH_ONLY = True # don't do NER but use the already present labels
 
 # methods
 
@@ -39,15 +39,23 @@ def iterate_corpus(corpus):
     training(corpus)
 
     annotation_documents = []
+    if PASS_THROUGH_ONLY:
+        logging.warning('pass through only mode; not doing a NER and just passing annotations as they are')
+
     for corpus_document in corpus:
         raw_datum_id = corpus_document['id']
         document_content = corpus_document['data']
 
-        for paragraph in document_content['data']:
+        # backward compatibility with former notation
+        if 'data' in document_content:
+            paragraphs = document_content['data']
+        else:
+            paragraphs = document_content['content']
+
+        for paragraph in paragraphs:
             human_checked = paragraph_was_human_checked(paragraph)
 
             if PASS_THROUGH_ONLY:
-                logging.warning('pass through only mode; not doing a NER and just passing annotations as they are')
                 ne_chunked_paragraph = paragraph
             else:
                 plain_tokenized_sentences = deannotize(paragraph)
