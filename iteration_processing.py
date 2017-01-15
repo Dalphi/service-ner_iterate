@@ -18,6 +18,18 @@ import nltk_tree_converter
 
 NEW_DOCUMENTS_LIMIT = 0
 PASS_THROUGH_ONLY = True # don't do NER but use the already present labels
+ANNOTATION_LABELS = [
+    {
+        "name": "Person",
+        "label": "PER",
+        "id": 0
+    },
+    {
+        "name": "Company / Organization",
+        "label": "COM",
+        "id": 1
+    },
+]
 
 # methods
 
@@ -156,7 +168,10 @@ def prefere_human_annotations(human_checked_paragraph, machine_labeled_paragraph
 
 def add_annotation_document(document_list, raw_id, document_content, human_checked):
     content = [document_content]
-    payload = {'content': content}
+    payload = {
+        'content': content,
+        'label_set': ANNOTATION_LABELS
+    }
     rank = len(document_list)
 
     if human_checked:
