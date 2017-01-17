@@ -22,7 +22,7 @@ python3
 
 and following the installation instructions.
 
-It could be necessary to provide a binary for [MegaM](https://www.umiacs.umd.edu/~hal/megam/).
+It could be necessary to provide a binary for [MegaM](https://www.umiacs.umd.edu/~hal/megam).
 Simply download or build it and provide its location by an environment variable, e.g. like
 
 ```
