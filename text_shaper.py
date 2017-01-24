@@ -10,6 +10,8 @@ from pprint import pprint as pp
 
 # import project libs
 
+import sys
+sys.path.append('lib')
 import ner_pipeline
 import nltk_tree_converter
 
