@@ -1,9 +1,6 @@
 deploy:
   stage: deploy
   script:
-    - cd /home/dalphi/services/ner_iterate_python
-    - git pull
-    - sudo systemctl stop service-ner_iterate_python.service
-    - sudo systemctl start service-ner_iterate_python.service
+    - sudo bash -l -c 'cd /home/dalphi/services/ner_iterate_python && git pull sudo systemctl stop service-ner_iterate_python.service && sudo systemctl start service-ner_iterate_python.service'
   only:
     - master
