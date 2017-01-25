@@ -16,6 +16,8 @@ import threading
 
 # import project libs
 
+import sys
+sys.path.append('lib')
 import ner_pipeline
 import iteration_processing
 import merge_processing
