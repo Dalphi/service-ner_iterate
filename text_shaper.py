@@ -6,6 +6,8 @@
 import re
 import json
 import argparse
+from os import listdir
+from os.path import isfile, join
 from pprint import pprint as pp
 
 # import project libs
@@ -79,16 +81,42 @@ if __name__ == '__main__':
         description='Dalphi Iterate Service text shaper; converts plain text to raw data')
 
     parser.add_argument(
-        'input',
+        '-i',
+        '--input',
         type=argparse.FileType('r')
     )
     parser.add_argument(
-        'output',
+        '-o',
+        '--output',
         type=argparse.FileType('w')
     )
+    parser.add_argument(
+        "-id",
+        "--input_dir",
+        help="to shape all files in the input directory")
+    parser.add_argument(
+        "-od",
+        "--output_dir",
+        help="to shape all files in the input directory")
     args = parser.parse_args()
 
-    paragraphs = read_input_file(args.input)
-    shaped_paragraphs = iterate_plain_paragraphs(paragraphs)
-    json = raw_data_json_from(shaped_paragraphs, args.input.name)
-    save_to_file(json, args.output)
+    if args.input_dir and args.output_dir:
+        path = args.input_dir
+        for file_name in listdir(path):
+            if not (isfile(join(path, file_name)) and file_name.endswith('.txt')): continue
+            file_handler = open(path + file_name, 'r', encoding='utf-8')
+            paragraphs = read_input_file(file_handler)
+            shaped_paragraphs = iterate_plain_paragraphs(paragraphs)
+            json_object = raw_data_json_from(shaped_paragraphs, file_name)
+
+            file_handler = open(args.output_dir + file_name + '.json', 'w', encoding='utf-8')
+            save_to_file(json_object, file_handler)
+
+    elif args.input and args.output:
+        paragraphs = read_input_file(args.input)
+        shaped_paragraphs = iterate_plain_paragraphs(paragraphs)
+        json_object = raw_data_json_from(shaped_paragraphs, args.input.name)
+        save_to_file(json_object, args.output)
+
+    else:
+        print('specify input and output (help: -h)')
