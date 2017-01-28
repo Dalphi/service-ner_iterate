@@ -22,14 +22,14 @@ import nltk_tree_converter
 
 def shape(raw_text):
     # simplify quotes
-    raw_text = re.sub("``", ' "', raw_text)
-    raw_text = re.sub("''", '" ', raw_text)
+    raw_text = re.sub("``", '"', raw_text)
+    raw_text = re.sub("''", '"', raw_text)
 
     # create a list of strings
     sentences = ner_pipeline.sentence_splitting(raw_text)
 
     # create a list of lists of strings
-    tokenized_sentences = [ner_pipeline.word_tokenization(sentence) for sentence in sentences]
+    tokenized_sentences = [word_tokenization(sentence) for sentence in sentences]
 
     sentences = []
     for sentence in tokenized_sentences:
@@ -42,6 +42,24 @@ def shape(raw_text):
         sentences.append(tokens)
 
     return sentences
+
+def word_tokenization(sentence):
+    tokens = ner_pipeline.word_tokenization(sentence)
+
+    # split mult-word-tokens
+    for index, _ in enumerate(tokens):
+        token = tokens[index]
+        if len(token) >= 3 and '-' in token:
+            sub_tokens = token.split('-')
+            del tokens[index]
+            tokens[index:index] = intersperse(sub_tokens, '-')
+
+    return tokens
+
+def intersperse(lst, item):
+    result = [item] * (len(lst) * 2 - 1)
+    result[0::2] = lst
+    return result
 
 def raw_data_json_from(shaped_sentences, input_file_name):
     raw_datum = {
