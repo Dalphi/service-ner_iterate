@@ -58,7 +58,7 @@ def iterate_corpus(corpus):
         raw_datum_id = corpus_document['id']
         document_content = corpus_document['data']
 
-        for paragraph in paragraphs:
+        for paragraph in document_content['data']:
             if PASS_THROUGH_ONLY:
                 ne_chunked_paragraph = paragraph
             else:
