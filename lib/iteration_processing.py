@@ -58,15 +58,7 @@ def iterate_corpus(corpus):
         raw_datum_id = corpus_document['id']
         document_content = corpus_document['data']
 
-        # backward compatibility with former notation
-        if 'data' in document_content:
-            paragraphs = document_content['data']
-        else:
-            paragraphs = document_content['content']
-
         for paragraph in paragraphs:
-            human_checked = paragraph_was_human_checked(paragraph)
-
             if PASS_THROUGH_ONLY:
                 ne_chunked_paragraph = paragraph
             else:
@@ -78,7 +70,7 @@ def iterate_corpus(corpus):
                 annotation_documents,
                 raw_datum_id,
                 annotated_paragraph,
-                human_checked
+                paragraph_was_human_checked(paragraph)
             )
 
             if limit_criterium(annotation_documents): break
