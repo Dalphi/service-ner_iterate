@@ -14,8 +14,8 @@ from datetime import datetime
 
 # defining globals & constants
 
-SAVE_DOCUMENTS_TO_FILE = True
-SAVE_CORPUS_TO_FILE = True
+SAVE_DOCUMENTS_TO_FILE = False
+SAVE_CORPUS_TO_FILE = False
 SAVE_ANNOTATION_DURATIONS = True
 DOCUMENT_FOLDER = 'processed_annotation_documents'
 CORPUS_FOLDER = 'processed_corpus_documents'
