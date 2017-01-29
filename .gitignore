@@ -36,5 +36,6 @@
 /**/__pycache__
 /raw_data
 /processed_annotation_documents
+/processed_corpus_documents
 /service.log
 /pip-selfcheck.json

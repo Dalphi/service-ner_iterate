@@ -6,16 +6,19 @@
 from pprint import pprint as pp
 import base64
 import json
-import datetime
 import os
+from datetime import datetime
 
 # import project libs
 # -
 
 # defining globals & constants
 
-SAVE_DOCUMENTS_TO_FILE = False
+SAVE_DOCUMENTS_TO_FILE = True
+SAVE_CORPUS_TO_FILE = True
+SAVE_ANNOTATION_DURATIONS = True
 DOCUMENT_FOLDER = 'processed_annotation_documents'
+CORPUS_FOLDER = 'processed_corpus_documents'
 
 # methods
 
@@ -28,21 +31,29 @@ def decode_post_data(request_json):
 
 def create_new_raw_datum(raw_datum_id, annotation_documents):
     content = []
-    for document in annotation_documents:
-        if SAVE_DOCUMENTS_TO_FILE:
-            save_document_to_file(document)
+    annotation_durations = []
 
+    for index, document in enumerate(annotation_documents):
+        if SAVE_DOCUMENTS_TO_FILE:
+            save_document_to_file(document, 'annotation_document', index)
         if document['raw_datum_id'] == raw_datum_id:
             json_encoded_payload = document['payload']
 
             # the `content` of an annotation document holds only one paragraph
             paragraph = json_encoded_payload['content'][0]
             content.append(paragraph)
+            if SAVE_ANNOTATION_DURATIONS:
+                duration = calculate_annotation_time(document)
+                annotation_durations.append(duration)
 
     raw_datum = {
         'data': content,
         'id': raw_datum_id
     }
+    if SAVE_ANNOTATION_DURATIONS:
+        raw_datum['annotation_duration_per_paragraph'] = annotation_durations
+    if SAVE_CORPUS_TO_FILE:
+        save_document_to_file(raw_datum, 'corpus_document')
 
     byte_encoded_content = json.dumps(raw_datum).encode('utf-8')
     b64_encoded_content = base64.b64encode(byte_encoded_content)
@@ -53,22 +64,47 @@ def create_new_raw_datum(raw_datum_id, annotation_documents):
         'id': raw_datum_id
     }
 
-def save_document_to_file(document):
+def calculate_annotation_time(document):
+    time_delta = -1
+    time_format = '%Y-%m-%d %H:%M:%S %Z'
+
+    if document['requested_at'] and document['updated_at']:
+        start_annotation_datetime = datetime.strptime(document['requested_at'], time_format)
+        end_annotation_datetime = datetime.strptime(document['updated_at'], time_format)
+        time_delta = (end_annotation_datetime - start_annotation_datetime).seconds
+
+    return time_delta
+
+def save_document_to_file(document, content_type, id=False):
     json_encoded_document = json.dumps(document)
-    file_name = generate_filename_for(document)
+    if content_type == 'annotation_document':
+        file_name = generate_document_filename_for(document, id)
+    else:
+        file_name = generate_corpus_filename_for(document)
 
     file_handler = open(file_name, 'w')
     file_handler.write(json_encoded_document)
     file_handler.close()
 
-def generate_filename_for(document):
-    prefix = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+def generate_document_filename_for(document, id):
+    prefix = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     raw_datum_id = document['raw_datum_id']
     rank = document['rank']
 
     if DOCUMENT_FOLDER:
         if not os.path.exists(DOCUMENT_FOLDER):
             os.makedirs(DOCUMENT_FOLDER)
-        return "%s/%s_%s_%s.json" % (DOCUMENT_FOLDER, prefix, raw_datum_id, rank)
+        return "%s/%s_%s_%s_%s.json" % (DOCUMENT_FOLDER, id, raw_datum_id, rank, prefix)
+    else:
+        return "%s_%s_%s.json" % (prefix, raw_datum_id, rank)
+
+def generate_corpus_filename_for(corpus):
+    prefix = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    raw_datum_id = corpus['id']
+
+    if CORPUS_FOLDER:
+        if not os.path.exists(CORPUS_FOLDER):
+            os.makedirs(CORPUS_FOLDER)
+        return "%s/raw-datum-%s_%s.json" % (CORPUS_FOLDER, raw_datum_id, prefix)
     else:
         return "%s_%s_%s.json" % (prefix, raw_datum_id, rank)
