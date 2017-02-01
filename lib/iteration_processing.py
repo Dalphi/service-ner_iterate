@@ -25,10 +25,30 @@ ANNOTATION_LABELS = [
         "id": 0
     },
     {
-        "name": "Company / Organization",
+        "name": "Stadt",
+        "label": "CITY",
+        "id": 3
+    },
+    {
+        "name": "Firma / Organisation",
         "label": "COM",
         "id": 1
     },
+    {
+        "name": "Produkt",
+        "label": "PROD",
+        "id": 2
+    },
+    {
+        "name": "Straße",
+        "label": "STREET",
+        "id": 4
+    },
+    {
+        "name": "PLZ",
+        "label": "ZIP",
+        "id": 5
+    }
 ]
 
 # methods

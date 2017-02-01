@@ -53,10 +53,10 @@ def iterate_who_are_you():
     message = {
         'role': 'iterate',
         'title': 'MaxEnt NER Iterator',
-        'description': 'Using NLTK\'s MaxEnt chunker for NER. Currently only for english language.',
-        'version': 0.2,
+        'description': 'Using NLTK\'s MaxEnt chunker for german NER.',
+        'version': 0.3,
         'problem_id': 'ner',
-        'interface_types': [ 'ner_complete', 'ner_paragraph' ]
+        'interface_types': [ 'ner_complete', 'questionnaire' ]
     }
     return create_json_response_from(message)
 
