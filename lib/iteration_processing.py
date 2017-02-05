@@ -17,17 +17,12 @@ import nltk_tree_converter
 # defining globals & constants
 
 NEW_DOCUMENTS_LIMIT = 0
-PASS_THROUGH_ONLY = False # don't do NER if True, just use the already present labels
+PASS_THROUGH_ONLY = True # don't do NER if True, just use the already present labels
 ANNOTATION_LABELS = [
     {
         "name": "Person",
         "label": "PER",
         "id": 0
-    },
-    {
-        "name": "Stadt",
-        "label": "CITY",
-        "id": 3
     },
     {
         "name": "Firma / Organisation",
@@ -38,6 +33,11 @@ ANNOTATION_LABELS = [
         "name": "Produkt",
         "label": "PROD",
         "id": 2
+    },
+    {
+        "name": "Stadt",
+        "label": "CITY",
+        "id": 3
     },
     {
         "name": "Straße",
@@ -80,17 +80,19 @@ def iterate_corpus(corpus):
 
         for paragraph in document_content['data']:
             if PASS_THROUGH_ONLY:
-                ne_chunked_paragraph = paragraph
+                annotated_paragraph = paragraph
+                human_checked = False
             else:
                 plain_tokenized_sentences = deannotize(paragraph)
                 ne_chunked_paragraph = ne_chunking(plain_tokenized_sentences)
+                annotated_paragraph = prefere_human_annotations(paragraph, ne_chunked_paragraph)
+                human_checked = paragraph_was_human_checked(paragraph)
 
-            annotated_paragraph = prefere_human_annotations(paragraph, ne_chunked_paragraph)
             add_annotation_document(
                 annotation_documents,
                 raw_datum_id,
                 annotated_paragraph,
-                paragraph_was_human_checked(paragraph)
+                human_checked
             )
 
             if limit_criterium(annotation_documents): break
