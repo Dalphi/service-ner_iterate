@@ -133,7 +133,7 @@ def draw_to_file(tree):
 
 # entry point as a stand alone script
 if __name__ == '__main__':
-    global POS_TAGGER_PATH
+    # global POS_TAGGER_PATH
     POS_TAGGER_PATH = '../' + POS_TAGGER_PATH
 
     text = "In Nordrhein-Westfalen betreibt die Tengelmann-Gruppe derzeit noch 105 Kaiser's-Tengelmann-Filialen mit rund 4000 Mitarbeitern."
